@@ -14,8 +14,25 @@ spec:
         app: mini-projet-web
     spec:
       containers:
-      - name: mini-projet-web
-        image: fatimazahrasr/appweb:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8000
+        - name: mini-projet-web
+          image: fatimazahrasr/appweb:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "🧭 Attente que le nom DNS de MySQL soit résolu...";
+              until nslookup mysql-service; do
+                echo "❌ DNS pas encore prêt. Attente...";
+                sleep 2;
+              done;
+
+              echo "✅ DNS résolu. Vérification du port 3306...";
+              until nc -z mysql-service 3306; do
+                echo "⏳ Port MySQL pas encore prêt. Attente...";
+                sleep 2;
+              done;
+
+              echo "🚀 Lancement de Django...";
+              python manage.py migrate && python manage.py runserver 0.0.0.0:8000
