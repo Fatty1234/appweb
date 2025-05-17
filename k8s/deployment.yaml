@@ -19,7 +19,7 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
-          command: ["/bin/sh", "-c"]
+          command: ["/bin/bash", "-c"]
           args:
             - |
               echo "🧭 Attente que le nom DNS de MySQL soit résolu...";
@@ -28,8 +28,8 @@ spec:
                 sleep 2;
               done;
 
-              echo "✅ DNS résolu. Vérification du port 3306...";
-              until nc -z mysql-service 3306; do
+              echo "✅ DNS résolu. Vérification du port 3306 avec /dev/tcp...";
+              while ! timeout 1 bash -c "</dev/tcp/mysql-service/3306" 2>/dev/null; do
                 echo "⏳ Port MySQL pas encore prêt. Attente...";
                 sleep 2;
               done;
