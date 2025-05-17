@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: mini-projet-web
-        image: mini-projet-web:latest
-        imagePullPolicy: Never
+        image: fatimazahrasr/appweb:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8000
