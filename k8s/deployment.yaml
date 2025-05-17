@@ -23,7 +23,7 @@ spec:
           args:
             - |
               echo "🧭 Attente que le nom DNS de MySQL soit résolu...";
-              until nslookup mysql-service; do
+              until getent hosts mysql-service; do
                 echo "❌ DNS pas encore prêt. Attente...";
                 sleep 2;
               done;
